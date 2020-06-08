@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 import Login
+import Utils
 
 app = Flask(__name__)
 
@@ -11,14 +12,11 @@ def index():
 
 @app.route('/login', methods=['POST'])
 def login():
-    if 'username' not in request.form or 'password' not in request.form:
-        return jsonify({'status': 'KO', 'reason': 'No username or password provided'})
-    username: str = request.form['username'].strip()
-    password: str = request.form['password'].strip()
-    if len(username) == 0 or len(password) == 0:
-        return jsonify({'status': 'KO', 'reason': 'Empty username or password'})
-    data = Login.do_login(username, password)
-    if data['symfony'] != '' and data['tvstRemember'] != '' and data['user_id'] != '':
+    if not Login.check_login_data(request.form):
+        return jsonify({'status': 'KO', 'reason': 'Invalid POST data'})
+    data = Login.do_login(request.form['username'], request.form['password'])
+    if Utils.are_form_data_keys_valid(data, ['symfony', 'tvstRemember', 'user_id']) and \
+            Utils.are_form_data_values_valid(data):
         data.update({'status': 'OK'})
         return jsonify(data)
     return jsonify({'status': 'KO', 'reason': 'Not logged in'})
