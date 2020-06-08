@@ -1,5 +1,7 @@
+import requests
 from flask import Flask, jsonify, request
 import Login
+import Shows
 import Utils
 
 app = Flask(__name__)
@@ -20,3 +22,11 @@ def login():
         data.update({'status': 'OK'})
         return jsonify(data)
     return jsonify({'status': 'KO', 'reason': 'Not logged in'})
+
+
+@app.route('/shows', methods=['POST'])
+def shows():
+    if not Shows.check_data(request.form):
+        return jsonify({'status': 'KO', 'reason': 'Invalid POST data'})
+    data = Shows.get_shows(request.form)
+    return jsonify(data)
