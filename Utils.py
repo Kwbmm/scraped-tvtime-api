@@ -1,10 +1,5 @@
 from typing import Dict, List, Any
-
-import requests
 from flask import session
-
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'}
 
 
 def are_form_data_keys_valid(params: Dict[str, any], expected_keys: List[str]) -> bool:

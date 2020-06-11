@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, request, session
 
+import Config
 import Login
 import Shows
 
 app = Flask(__name__)
-app.secret_key = '<super secret key>'
+app.secret_key = Config.SESSION_KEY
 
 
 @app.route('/')

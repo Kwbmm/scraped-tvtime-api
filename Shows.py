@@ -1,8 +1,9 @@
 from typing import Dict, List
 from bs4 import BeautifulSoup
-import requests
 from flask import session
 
+import requests
+import Config
 import Utils
 
 
@@ -10,7 +11,7 @@ def get_shows() -> Dict[str, any]:
     cookies = {'symfony': session['username']['symfony'], 'tvstRemember': session['username']['tvstRemember']}
     resp = requests.get("https://www.tvtime.com/en/user/{}/profile".format(session['username']['user_id']),
                         cookies=cookies,
-                        headers=Utils.HEADERS)
+                        headers=Config.HEADERS)
     resp.raise_for_status()
     Utils.update_cookies(resp.cookies)
     series = __parse_series(resp.text)
