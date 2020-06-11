@@ -1,6 +1,8 @@
 from typing import Dict
 from bs4 import BeautifulSoup
 import requests
+from flask import session
+
 import Utils
 
 
@@ -10,7 +12,7 @@ def check_login_data(params: Dict) -> bool:
     return Utils.are_form_data_values_valid(params)
 
 
-def do_login(username: str, password: str) -> Dict[str, str]:
+def do_login(username: str, password: str) -> bool:
     resp_login = requests.get('https://www.tvtime.com/login', headers=Utils.HEADERS)
     resp_login.raise_for_status()
     symfony_cookie = resp_login.cookies['symfony']
@@ -19,11 +21,14 @@ def do_login(username: str, password: str) -> Dict[str, str]:
     resp_signin.raise_for_status()
     if len(resp_signin.history) == 0 or 'symfony' not in resp_signin.history[0].cookies or 'tvstRemember' not in \
             resp_signin.history[0].cookies:
-        return {'symfony': '', 'tvstRemember': ''}
+        return False
     user_id = __get_user_id(resp_signin.text)
-    return {'symfony': resp_signin.history[0].cookies['symfony'],
-            'tvstRemember': resp_signin.history[0].cookies['tvstRemember'],
-            'user_id': user_id}
+    if len(user_id) > 0:
+        session['username'] = {'symfony': resp_signin.history[0].cookies['symfony'],
+                               'tvstRemember': resp_signin.history[0].cookies['tvstRemember'],
+                               'user_id': user_id}
+        return True
+    return False
 
 
 def __get_user_id(html_page: str) -> str:

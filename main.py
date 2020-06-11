@@ -1,10 +1,10 @@
-import requests
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
+
 import Login
 import Shows
-import Utils
 
 app = Flask(__name__)
+app.secret_key = '<super secret key>'
 
 
 @app.route('/')
@@ -14,19 +14,17 @@ def index():
 
 @app.route('/login', methods=['POST'])
 def login():
+    session.pop('username', None)
     if not Login.check_login_data(request.form):
         return jsonify({'status': 'KO', 'reason': 'Invalid POST data'})
-    data = Login.do_login(request.form['username'], request.form['password'])
-    if Utils.are_form_data_keys_valid(data, ['symfony', 'tvstRemember', 'user_id']) and \
-            Utils.are_form_data_values_valid(data):
-        data.update({'status': 'OK'})
-        return jsonify(data)
+    if Login.do_login(request.form['username'], request.form['password']):
+        return jsonify({'status': 'OK'})
     return jsonify({'status': 'KO', 'reason': 'Not logged in'})
 
 
-@app.route('/shows', methods=['POST'])
+@app.route('/shows')
 def shows():
-    if not Shows.check_data(request.form):
-        return jsonify({'status': 'KO', 'reason': 'Invalid POST data'})
-    data = Shows.get_shows(request.form)
+    if 'username' not in session:
+        return jsonify({'status': 'KO', 'reason': 'Not logged in'})
+    data = Shows.get_shows()
     return jsonify(data)

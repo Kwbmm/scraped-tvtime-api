@@ -1,20 +1,18 @@
 from typing import Dict, List
 from bs4 import BeautifulSoup
 import requests
+from flask import session
+
 import Utils
 
 
-def check_data(params: Dict[str, str]) -> bool:
-    if not Utils.are_form_data_keys_valid(params, ['symfony', 'tvstRemember', 'user_id']):
-        return False
-    return Utils.are_form_data_values_valid(params)
-
-
-def get_shows(params: Dict[str, str]) -> Dict[str, any]:
-    cookies = {'symfony': params['symfony'], 'tvstRemember': params['tvstRemember']}
-    resp = requests.get("https://www.tvtime.com/en/user/{}/profile".format(params['user_id']), cookies=cookies,
+def get_shows() -> Dict[str, any]:
+    cookies = {'symfony': session['username']['symfony'], 'tvstRemember': session['username']['tvstRemember']}
+    resp = requests.get("https://www.tvtime.com/en/user/{}/profile".format(session['username']['user_id']),
+                        cookies=cookies,
                         headers=Utils.HEADERS)
     resp.raise_for_status()
+    Utils.update_cookies(resp.cookies)
     series = __parse_series(resp.text)
     return {'series': series, 'count': len(series)}
 
