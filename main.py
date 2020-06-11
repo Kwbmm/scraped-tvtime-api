@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, session
 import Config
 import Login
 import Shows
+from Utils import ko_response
 
 app = Flask(__name__)
 app.secret_key = Config.SESSION_KEY
@@ -17,15 +18,15 @@ def index():
 def login():
     session.pop('username', None)
     if not Login.check_login_data(request.form):
-        return jsonify({'status': 'KO', 'reason': 'Invalid POST data'})
+        return ko_response('Invalid POST data')
     if Login.do_login(request.form['username'], request.form['password']):
         return jsonify({'status': 'OK'})
-    return jsonify({'status': 'KO', 'reason': 'Not logged in'})
+    return ko_response('Not logged in')
 
 
 @app.route('/shows')
 def shows():
     if 'username' not in session:
-        return jsonify({'status': 'KO', 'reason': 'Not logged in'})
+        return ko_response('Not logged in')
     data = Shows.get_shows()
     return jsonify(data)

@@ -1,5 +1,5 @@
 from typing import Dict, List, Any
-from flask import session
+from flask import session, jsonify
 
 
 def are_form_data_keys_valid(params: Dict[str, any], expected_keys: List[str]) -> bool:
@@ -21,3 +21,7 @@ def update_cookies(cookies: Any) -> None:
     old_remember_cookie = session['username']['tvstRemember']
     session['username']['symfony'] = cookies.get('symfony', old_session_cookie)
     session['username']['tvstRemember'] = cookies.get('tvstRemember', old_remember_cookie)
+
+
+def ko_response(reason: str) -> Any:
+    return jsonify({'status': 'KO', 'reason': reason})
