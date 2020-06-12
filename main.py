@@ -30,3 +30,10 @@ def shows():
         return ko_response('Not logged in')
     data = Shows.get_shows()
     return jsonify(data)
+
+
+@app.route('/show/<int:show_id>')
+def show(show_id: int):
+    if 'username' not in session:
+        return ko_response('Not logged in')
+    return jsonify(Shows.get_show(show_id))

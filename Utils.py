@@ -16,7 +16,11 @@ def are_form_data_values_valid(params: Dict[str, str]) -> bool:
     return True
 
 
-def update_cookies(cookies: Any) -> None:
+def get_tvtime_cookies():
+    return {'symfony': session['username']['symfony'], 'tvstRemember': session['username']['tvstRemember']}
+
+
+def update_tvtime_cookies(cookies: Any) -> None:
     old_session_cookie = session['username']['symfony']
     old_remember_cookie = session['username']['tvstRemember']
     session['username']['symfony'] = cookies.get('symfony', old_session_cookie)
