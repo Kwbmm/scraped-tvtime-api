@@ -19,3 +19,15 @@ Not many, except for a TVTime account. But if you are here, you probably already
 
 `requirements.txt` takes care of installing, through `pip` what is needed to run the API.
 
+## Usage
+
+**Before using this API, please make sure that the backend on which you are running this Flask API can be accessed over secure http requests. Since you are sending login information containing your ID and password, you should NEVER send them on unsecure connections.**
+
+### APIs
+*The following API is a working in progress*
+
+|**URL**|**Method**|**Data**|**Response**|
+|---|---|---|---|
+|/login   |POST   |username + password (in request body)   |session cookie   |
+|/shows   |GET   | session cookie (in request header)   | List of series you are tracking   |
+|/show/\<id\>   |GET   |session cookie (in request header)   |List of seasons + episodes for show `id`   |
