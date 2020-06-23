@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 from flask import session
 
 import requests
-import Config
-import Utils
+from src.etc import Config, Utils
 
 
 def get_shows() -> Dict[str, any]:

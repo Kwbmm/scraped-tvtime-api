@@ -1,11 +1,9 @@
 import requests
 from flask import Flask, jsonify, request, session
 
-import Config
-import Login
-import Shows
-import Utils
-from Utils import ko_response
+from src.etc import Config, Utils
+from src.endpoints_processors import Login, Shows
+from src.etc.Utils import ko_response
 
 app = Flask(__name__)
 app.secret_key = Config.SESSION_KEY

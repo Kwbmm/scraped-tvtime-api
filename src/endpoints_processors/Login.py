@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 from flask import session
 
-import Config
-import Utils
+from src.etc import Config, Utils
 
 
 def check_login_data(params: Dict) -> bool:
