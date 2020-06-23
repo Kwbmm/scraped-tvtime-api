@@ -52,7 +52,9 @@ def parse_season_list(show_page: str) -> List[Any]:
             episode_number = episode_element.select_one('span.episode-nb-label').text.strip()
             episode_name = episode_element.select_one('span.episode-name').text.strip()
             episode_air_date = episode_element.select_one('span.episode-air-date').text.strip()
+            watched = 'active' in episode_element.parent.parent.select_one('div.actions > div.row > a')['class']
             episodes.append(
-                {"id": episode_id, "number": episode_number, "name": episode_name, "air_date": episode_air_date})
+                {"id": episode_id, "number": episode_number, "name": episode_name, "air_date": episode_air_date,
+                 "watched": watched})
         seasons.append({"name": season_name, "number_of_episodes": num_episodes, "episodes": episodes})
     return seasons
