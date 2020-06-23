@@ -1,8 +1,10 @@
+import requests
 from flask import Flask, jsonify, request, session
 
 import Config
 import Login
 import Shows
+import Utils
 from Utils import ko_response
 
 app = Flask(__name__)
@@ -37,3 +39,19 @@ def show(show_id: int):
     if 'username' not in session:
         return ko_response('Not logged in')
     return jsonify(Shows.get_show(show_id))
+
+
+@app.route('/episode/<int:episode_id>/watched', methods=['PUT', 'DELETE'])
+def mark_watched(episode_id: int):
+    episode_payload = {'episode_id': episode_id}
+    if request.method == 'PUT':
+        result = requests.put('https://www.tvtime.com/watched_episodes', headers=Config.HEADERS,
+                              cookies=Utils.get_tvtime_cookies(), data=episode_payload)
+        result.raise_for_status()
+        return jsonify(result.json())
+    elif request.method == 'DELETE':
+        result = requests.delete('https://www.tvtime.com/watched_episodes', headers=Config.HEADERS,
+                                 cookies=Utils.get_tvtime_cookies(), data=episode_payload)
+        result.raise_for_status()
+        return jsonify(result.json())
+    return jsonify({})
