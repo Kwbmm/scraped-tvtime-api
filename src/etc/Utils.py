@@ -35,6 +35,10 @@ def ko_response(reason: str) -> Any:
     return jsonify({'status': 'KO', 'reason': reason})
 
 
+def ok_response() -> Any:
+    return jsonify({'status': 'OK'})
+
+
 def get(url: str, update_session=True, **kwargs: Any) -> requests.Response:
     resp = requests.get(url, headers=Config.HEADERS, cookies=kwargs.get('cookies', {}))
     resp.raise_for_status()
