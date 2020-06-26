@@ -1,8 +1,7 @@
-import requests
 from flask import Flask, jsonify, request, session
 
-from src.etc import Config, Utils
 from src.endpoints_processors import Login, Shows
+from src.etc import Config, Utils
 from src.etc.Utils import ko_response
 
 app = Flask(__name__)
@@ -43,13 +42,11 @@ def show(show_id: int):
 def mark_watched(episode_id: int):
     episode_payload = {'episode_id': episode_id}
     if request.method == 'PUT':
-        result = requests.put('https://www.tvtime.com/watched_episodes', headers=Config.HEADERS,
-                              cookies=Utils.get_tvtime_cookies(), data=episode_payload)
-        result.raise_for_status()
+        result = Utils.put('https://www.tvtime.com/watched_episodes', episode_payload,
+                           cookies=Utils.get_tvtime_cookies())
         return jsonify(result.json())
     elif request.method == 'DELETE':
-        result = requests.delete('https://www.tvtime.com/watched_episodes', headers=Config.HEADERS,
-                                 cookies=Utils.get_tvtime_cookies(), data=episode_payload)
-        result.raise_for_status()
+        result = Utils.delete('https://www.tvtime.com/watched_episodes', episode_payload,
+                              cookies=Utils.get_tvtime_cookies())
         return jsonify(result.json())
     return jsonify({})

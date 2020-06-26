@@ -1,9 +1,9 @@
 from typing import Dict
+
 from bs4 import BeautifulSoup
-import requests
 from flask import session
 
-from src.etc import Config, Utils
+from src.etc import Utils
 
 
 def check_login_data(params: Dict) -> bool:
@@ -13,13 +13,10 @@ def check_login_data(params: Dict) -> bool:
 
 
 def do_login(username: str, password: str) -> bool:
-    resp_login = requests.get('https://www.tvtime.com/login', headers=Config.HEADERS)
-    resp_login.raise_for_status()
+    resp_login = Utils.get('https://www.tvtime.com/login', False)
     symfony_cookie = resp_login.cookies['symfony']
     post_data = {'symfony': symfony_cookie, 'username': username, 'password': password}
-    resp_signin = requests.post('https://www.tvtime.com/signin', data=post_data,
-                                headers=Config.HEADERS)
-    resp_signin.raise_for_status()
+    resp_signin = Utils.post('https://www.tvtime.com/signin', post_data, False)
     if len(resp_signin.history) == 0 or 'symfony' not in resp_signin.history[0].cookies or 'tvstRemember' not in \
             resp_signin.history[0].cookies:
         return False

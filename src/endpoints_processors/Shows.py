@@ -1,17 +1,14 @@
 from typing import Dict, List, Any
+
 from bs4 import BeautifulSoup
 from flask import session
 
-import requests
-from src.etc import Config, Utils
+from src.etc import Utils
 
 
 def get_shows() -> Dict[str, any]:
-    resp = requests.get("https://www.tvtime.com/en/user/{}/profile".format(session['username']['user_id']),
-                        cookies=Utils.get_tvtime_cookies(),
-                        headers=Config.HEADERS)
-    resp.raise_for_status()
-    Utils.update_tvtime_cookies(resp.cookies)
+    resp = Utils.get('https://www.tvtime.com/en/user/{}/profile'.format(session['username']['user_id']),
+                     cookies=Utils.get_tvtime_cookies())
     series = parse_series_list(resp.text)
     return {'series': series, 'count': len(series)}
 
@@ -31,10 +28,7 @@ def parse_series_list(shows_page: str) -> List[any]:
 
 
 def get_show(show_id: int) -> Dict[str, Any]:
-    resp = requests.get('https://www.tvtime.com/en/show/{}'.format(show_id), headers=Config.HEADERS,
-                        cookies=Utils.get_tvtime_cookies())
-    resp.raise_for_status()
-    Utils.update_tvtime_cookies(resp.cookies)
+    resp = Utils.get('https://www.tvtime.com/en/show/{}'.format(show_id), cookies=Utils.get_tvtime_cookies())
     seasons = parse_season_list(resp.text)
     return {"count": len(seasons), "seasons": seasons}
 
