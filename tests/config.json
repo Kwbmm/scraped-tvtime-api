@@ -1,0 +1,28 @@
+{
+  "series": [
+    {
+      "id": "73244",
+      "name": "The Office",
+      "watched": {
+        "season": "3",
+        "episode": "7"
+      }
+    },
+    {
+      "id": "121361",
+      "name": "Game of Thrones",
+      "watched": {
+        "season": "7",
+        "episode": "7"
+      }
+    },
+    {
+      "id": "355567",
+      "name": "The Boys",
+      "watched": {
+        "season": "1",
+        "episode": "8"
+      }
+    }
+  ]
+}
