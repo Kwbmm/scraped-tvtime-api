@@ -1,5 +1,3 @@
-import json
-import time
 import unittest
 
 import flask
@@ -7,55 +5,14 @@ import requests
 
 from src.etc import Config
 from src.main import app
+from tests import TestUtil
 
 
 class LoginTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        with open('tests/config.json', 'r') as config_fp:
-            test_shows = json.load(config_fp)
-        current_time = int(time.time())
-        username = 'user{}'.format(current_time)
-        password = username
-        email_address = '{username}@asd.asd'.format(username=username)
-        print('Creating {} '.format(username), end='')
-        resp = requests.post('https://www.tvtime.com/signup', headers=Config.HEADERS,
-                             data={'username': username, 'password': password, 'email': email_address})
-        resp.raise_for_status()
-        history_cookies = {'symfony': resp.history[0].cookies.get('symfony', ''),
-                           'tvstRemember': resp.history[0].cookies.get('tvstRemember', '')}
-        cookies = {'symfony': resp.cookies.get('symfony', ''), 'tvstRemember': resp.cookies.get('tvstRemember', '')}
-        cls._cookies = {}
-        if all(cookies.values()):
-            cls._cookies = cookies
-        elif all(history_cookies.values()):
-            cls._cookies = history_cookies
-        else:
-            error = "Failed to create user\n\tStatus code={code}\nNo cookies found!".format(code=resp.status_code)
-            raise ConnectionError(error)
-        # TODO: This should be logged
+        cls._cookies, cls._username, cls._password = TestUtil.create_user()
         print('OK')
-
-        # Add shows
-        for series in test_shows['series']:
-            # TODO: This should be logged
-            print('Adding {}... '.format(series['name']), end='')
-            cls.put_and_update_cookies('https://www.tvtime.com/followed_shows', {'show_id': series['id']})
-            watched_until_payload = {'season': series['watched']['season'], 'episode': series['watched']['episode'],
-                                     'show_id': series['id']}
-            cls.put_and_update_cookies('https://www.tvtime.com/show_watch_until', watched_until_payload)
-            # TODO: This should be logged
-            print('OK')
-        cls._username = username
-        cls._password = password
-
-    @classmethod
-    def put_and_update_cookies(cls, url, payload):
-        add_show_resp = requests.put(url, headers=Config.HEADERS,
-                                     data=payload, cookies=cls._cookies)
-        add_show_resp.raise_for_status()
-        cls._cookies = {'symfony': add_show_resp.cookies.get('symfony', cls._cookies['symfony']),
-                        'tvstRemember': add_show_resp.cookies.get('tvstRemember', cls._cookies['tvstRemember'])}
 
     @classmethod
     def tearDownClass(cls) -> None:
