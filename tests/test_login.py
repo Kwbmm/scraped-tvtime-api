@@ -2,6 +2,7 @@ import json
 import time
 import unittest
 
+import flask
 import requests
 
 from src.etc import Config
@@ -17,7 +18,7 @@ class LoginTestCase(unittest.TestCase):
         username = 'user{}'.format(current_time)
         password = username
         email_address = '{username}@asd.asd'.format(username=username)
-        print('Creating {}'.format(username))
+        print('Creating {} '.format(username), end='')
         resp = requests.post('https://www.tvtime.com/signup', headers=Config.HEADERS,
                              data={'username': username, 'password': password, 'email': email_address})
         resp.raise_for_status()
@@ -33,18 +34,20 @@ class LoginTestCase(unittest.TestCase):
             error = "Failed to create user\n\tStatus code={code}\nNo cookies found!".format(code=resp.status_code)
             raise ConnectionError(error)
         # TODO: This should be logged
-        print('Created user {}'.format(username))
+        print('OK')
 
         # Add shows
         for series in test_shows['series']:
             # TODO: This should be logged
-            print('Adding {}'.format(series['name']))
+            print('Adding {}... '.format(series['name']), end='')
             cls.put_and_update_cookies('https://www.tvtime.com/followed_shows', {'show_id': series['id']})
             watched_until_payload = {'season': series['watched']['season'], 'episode': series['watched']['episode'],
                                      'show_id': series['id']}
             cls.put_and_update_cookies('https://www.tvtime.com/show_watch_until', watched_until_payload)
             # TODO: This should be logged
-            print('Added {}'.format(series['name']))
+            print('OK')
+        cls._username = username
+        cls._password = password
 
     @classmethod
     def put_and_update_cookies(cls, url, payload):
@@ -61,6 +64,7 @@ class LoginTestCase(unittest.TestCase):
         res.raise_for_status()
 
     def setUp(self) -> None:
+        app.config['SECRET_KEY'] = 'test_key'
         self.client = app.test_client()
 
     def test_when_wrong_keys_should_ko(self):
@@ -92,6 +96,24 @@ class LoginTestCase(unittest.TestCase):
 
         # Verify
         self.assertEqual(result.json['status'], 'KO')
+
+    def test_when_correct_user_and_pass_should_ok(self):
+        # Given
+        payload = {'username': self._username, 'password': self._password}
+
+        with self.client as c:
+            with c.session_transaction() as s:
+                s['username'] = {'dummy': '42'}
+            # Test
+            result = c.post('/login', data=payload)
+            has_dummy_key = 'dummy' in flask.session['username']
+            has_userdata = 'user_id' in flask.session['username'] and 'symfony' in flask.session[
+                'username'] and 'tvstRemember' in flask.session['username']
+
+        # Verify
+        self.assertEqual(result.json['status'], 'OK')
+        self.assertFalse(has_dummy_key)
+        self.assertTrue(has_userdata)
 
 
 if __name__ == '__main__':
