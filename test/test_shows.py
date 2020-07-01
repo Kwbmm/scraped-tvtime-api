@@ -6,7 +6,7 @@ import requests
 
 from src.etc import Config
 from src.main import app
-from tests import TestUtil
+from test import TestUtil
 
 
 class ShowsTestCase(unittest.TestCase):
@@ -38,7 +38,7 @@ class ShowsTestCase(unittest.TestCase):
     def test_when_fetching_shows_should_return_correct_data(self):
         # Given
         self.client.post('/login', data={'username': self._username, 'password': self._password})
-        with open('tests/config.json', 'r') as fp:
+        with open('test/config.json', 'r') as fp:
             expected_data = json.load(fp)
 
         # Test
@@ -65,7 +65,7 @@ class ShowsTestCase(unittest.TestCase):
     def test_when_fetching_single_show_should_return_episodes(self):
         # Given
         self.client.post('/login', data={'username': self._username, 'password': self._password})
-        with open('tests/config.json', 'r') as fp:
+        with open('test/config.json', 'r') as fp:
             expected_data = json.load(fp)
 
         selected_series = expected_data['series'][random.randint(0, len(expected_data['series']))]

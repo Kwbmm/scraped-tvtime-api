@@ -5,7 +5,7 @@ import requests
 
 from src.etc import Config
 from src.main import app
-from tests import TestUtil
+from test import TestUtil
 
 
 class LoginTestCase(unittest.TestCase):

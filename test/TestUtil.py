@@ -30,7 +30,7 @@ def create_user() -> Tuple[Dict, str, str]:
 
 
 def add_shows(cookies: Dict[str, Any]) -> Dict[str, Any]:
-    with open('tests/config.json', 'r') as config_fp:
+    with open('test/config.json', 'r') as config_fp:
         test_shows = json.load(config_fp)
     # Add shows
     for series in test_shows['series']:
