@@ -43,7 +43,7 @@ def add_shows(cookies: Dict[str, Any]) -> Dict[str, Any]:
         cookies = _put_and_return_cookies('https://www.tvtime.com/show_watch_until', watched_until_payload, cookies)
         # TODO: This should be logged
         print('OK')
-        return cookies
+    return cookies
 
 
 def _put_and_return_cookies(url: str, payload: Dict[str, Any], cookies: Dict[str, Any]) -> Dict[str, Any]:

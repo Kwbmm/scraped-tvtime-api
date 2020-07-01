@@ -3,6 +3,7 @@
     {
       "id": "73244",
       "name": "The Office",
+      "count_watched": 35,
       "watched": {
         "season": "3",
         "episode": "7"
@@ -11,6 +12,7 @@
     {
       "id": "121361",
       "name": "Game of Thrones",
+      "count_watched": 67,
       "watched": {
         "season": "7",
         "episode": "7"
@@ -19,6 +21,7 @@
     {
       "id": "355567",
       "name": "The Boys",
+      "count_watched": 8,
       "watched": {
         "season": "1",
         "episode": "8"
