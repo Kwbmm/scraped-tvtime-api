@@ -1,4 +1,3 @@
-import json
 import time
 from typing import Tuple, Dict, Any
 
@@ -29,11 +28,9 @@ def create_user() -> Tuple[Dict, str, str]:
         raise ConnectionError(error)
 
 
-def add_shows(cookies: Dict[str, Any]) -> Dict[str, Any]:
-    with open('test/config.json', 'r') as config_fp:
-        test_shows = json.load(config_fp)
+def add_shows(cookies: Dict[str, Any], shows_data: Dict[str, Any]) -> Dict[str, Any]:
     # Add shows
-    for series in test_shows['series']:
+    for series in shows_data['series']:
         # TODO: This should be logged
         print('Adding {}... '.format(series['name']), end='')
         cookies = _put_and_return_cookies('https://www.tvtime.com/followed_shows', {'show_id': series['id']}, cookies)

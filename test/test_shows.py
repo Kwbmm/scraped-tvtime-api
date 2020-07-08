@@ -14,7 +14,12 @@ class ShowsTestCase(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls._cookies, cls._username, cls._password = TestUtil.create_user()
         print('OK')
-        cls._cookies = TestUtil.add_shows(cls._cookies)
+
+        # Load the shows in memory
+        with open('test/config.json', 'r') as config_fp:
+            cls._expected_data = json.load(config_fp)
+
+        cls._cookies = TestUtil.add_shows(cls._cookies, cls._expected_data)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -38,18 +43,16 @@ class ShowsTestCase(unittest.TestCase):
     def test_when_fetching_shows_should_return_correct_data(self):
         # Given
         self.client.post('/login', data={'username': self._username, 'password': self._password})
-        with open('test/config.json', 'r') as fp:
-            expected_data = json.load(fp)
 
         # Test
         response = self.client.get('/shows')
 
         # Verify
         json_data = response.json
-        self.assertEqual(json_data['count'], len(expected_data['series']))
+        self.assertEqual(json_data['count'], len(self._expected_data['series']))
         output_ids = [series['id'] for series in json_data['series']]
         unmatched_ids = []
-        for series in expected_data['series']:
+        for series in self._expected_data['series']:
             expected_id = series['id']
             if expected_id not in output_ids:
                 unmatched_ids.append(expected_id)
@@ -65,10 +68,9 @@ class ShowsTestCase(unittest.TestCase):
     def test_when_fetching_single_show_should_return_episodes(self):
         # Given
         self.client.post('/login', data={'username': self._username, 'password': self._password})
-        with open('test/config.json', 'r') as fp:
-            expected_data = json.load(fp)
 
-        selected_series = expected_data['series'][random.randint(0, len(expected_data['series']))]
+        selected_show_index = random.randrange(0, len(self._expected_data['series']))
+        selected_series = self._expected_data['series'][selected_show_index]
         # TODO: This should be logged
         print("Testing with series {}".format(selected_series['name']))
         selected_series_id = selected_series['id']
