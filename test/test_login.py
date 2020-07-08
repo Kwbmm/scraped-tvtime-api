@@ -16,9 +16,11 @@ class LoginTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
+        print("Deleting {}... ".format(cls._username), end='')
         res = requests.delete('https://www.tvtime.com/settings/delete_account', headers=Config.HEADERS,
                               cookies=cls._cookies)
         res.raise_for_status()
+        print("OK")
 
     def setUp(self) -> None:
         app.config['SECRET_KEY'] = 'test_key'
