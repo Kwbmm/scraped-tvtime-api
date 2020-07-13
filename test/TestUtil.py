@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Tuple, Dict, Any
 
@@ -11,8 +12,7 @@ def create_user() -> Tuple[Dict, str, str]:
     username = 'user{}'.format(current_time)
     password = username
     email_address = '{username}@asd.asd'.format(username=username)
-    # TODO: This should be logged
-    print('Creating {}... '.format(username), end='')
+    logging.info('Creating {}... '.format(username))
     resp = requests.post('https://www.tvtime.com/signup', headers=Config.HEADERS,
                          data={'username': username, 'password': password, 'email': email_address})
     resp.raise_for_status()
@@ -25,21 +25,19 @@ def create_user() -> Tuple[Dict, str, str]:
         return history_cookies, username, password
     else:
         error = "Failed to create user\n\tStatus code={code}\nNo cookies found!".format(code=resp.status_code)
+        logging.error(error)
         raise ConnectionError(error)
 
 
 def add_shows(cookies: Dict[str, Any], shows_data: Dict[str, Any]) -> Dict[str, Any]:
     # Add shows
     for series in shows_data['series']:
-        # TODO: This should be logged
-        print('Adding {}... '.format(series['name']), end='')
+        logging.info('Adding {}... '.format(series['name']))
         cookies = _put_and_return_cookies('https://www.tvtime.com/followed_shows', {'show_id': series['id']}, cookies)
 
         watched_until_payload = {'season': series['watched']['season'], 'episode': series['watched']['episode'],
                                  'show_id': series['id']}
         cookies = _put_and_return_cookies('https://www.tvtime.com/show_watch_until', watched_until_payload, cookies)
-        # TODO: This should be logged
-        print('OK')
     return cookies
 
 

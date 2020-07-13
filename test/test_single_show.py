@@ -1,3 +1,4 @@
+import logging
 import random
 import unittest
 
@@ -23,8 +24,7 @@ class TestSingleShow(BaseTestClass):
         self.assertEqual('OK', login_resp.json['status'])
         selected_show_index = random.randrange(0, len(self._expected_data['series']))
         selected_series = self._expected_data['series'][selected_show_index]
-        # TODO: This should be logged
-        print("Testing with series {}".format(selected_series['name']))
+        logging.info("Testing with series {}".format(selected_series['name']))
         selected_series_id = selected_series['id']
 
         # Test

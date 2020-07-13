@@ -1,3 +1,4 @@
+import logging
 import unittest
 
 import flask
@@ -10,8 +11,8 @@ from test.BaseTestClass import BaseTestClass
 class LoginTestCase(BaseTestClass):
     @classmethod
     def setUpClass(cls) -> None:
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         cls._cookies, cls._username, cls._password = TestUtil.create_user()
-        print('OK')
 
     def setUp(self) -> None:
         app.config['SECRET_KEY'] = 'test_key'
