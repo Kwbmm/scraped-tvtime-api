@@ -1,26 +1,17 @@
 import unittest
 
 import flask
-import requests
 
-from src.etc import Config
 from src.main import app
 from test import TestUtil
+from test.BaseTestClass import BaseTestClass
 
 
-class LoginTestCase(unittest.TestCase):
+class LoginTestCase(BaseTestClass):
     @classmethod
     def setUpClass(cls) -> None:
         cls._cookies, cls._username, cls._password = TestUtil.create_user()
         print('OK')
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        print("Deleting {}... ".format(cls._username), end='')
-        res = requests.delete('https://www.tvtime.com/settings/delete_account', headers=Config.HEADERS,
-                              cookies=cls._cookies)
-        res.raise_for_status()
-        print("OK")
 
     def setUp(self) -> None:
         app.config['SECRET_KEY'] = 'test_key'
