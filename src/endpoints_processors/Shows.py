@@ -23,7 +23,7 @@ def parse_series_list(shows_page: str) -> List[any]:
         show_id = element.select_one('a.show-link')['href'].split('/')[3]
         progress = element.select_one('a.show-link div.progress-bar')['style'].split(':')[1].strip()
         time = element.select_one('div.poster-details > h3').text.strip()
-        series.append({'id': show_id, 'progress': progress, 'name': show_name, 'time': time})
+        series.append({'id': int(show_id), 'progress': progress, 'name': show_name, 'time': time})
     return series
 
 

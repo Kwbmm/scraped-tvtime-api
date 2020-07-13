@@ -1,7 +1,7 @@
 {
   "series": [
     {
-      "id": "73244",
+      "id": 73244,
       "name": "The Office",
       "count_watched": 35,
       "watched": {
@@ -10,7 +10,7 @@
       }
     },
     {
-      "id": "121361",
+      "id": 121361,
       "name": "Game of Thrones",
       "count_watched": 67,
       "watched": {
@@ -19,7 +19,7 @@
       }
     },
     {
-      "id": "355567",
+      "id": 355567,
       "name": "The Boys",
       "count_watched": 8,
       "watched": {

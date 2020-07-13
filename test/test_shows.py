@@ -1,5 +1,4 @@
 import json
-import random
 import unittest
 
 import requests
@@ -57,32 +56,6 @@ class ShowsTestCase(unittest.TestCase):
             if expected_id not in output_ids:
                 unmatched_ids.append(expected_id)
         self.assertEqual(0, len(unmatched_ids), "The following IDs are not in the output: {}".format(unmatched_ids))
-
-    def test_when_not_logged_in_show_should_ko(self):
-        # Test
-        response = self.client.get('/show/42')
-
-        # Verify
-        self.assertEqual('KO', response.json['status'])
-
-    def test_when_fetching_single_show_should_return_episodes(self):
-        # Given
-        self.client.post('/login', data={'username': self._username, 'password': self._password})
-
-        selected_show_index = random.randrange(0, len(self._expected_data['series']))
-        selected_series = self._expected_data['series'][selected_show_index]
-        # TODO: This should be logged
-        print("Testing with series {}".format(selected_series['name']))
-        selected_series_id = selected_series['id']
-
-        # Test
-        response = self.client.get('/show/{}'.format(selected_series_id))
-        json_data = response.json
-
-        # Verify
-        watched_episodes = sum(
-            [episode['watched'] for season in json_data['seasons'] for episode in season['episodes']])
-        self.assertEqual(selected_series['count_watched'], watched_episodes)
 
 
 if __name__ == '__main__':
