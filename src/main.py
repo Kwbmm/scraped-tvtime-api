@@ -40,6 +40,8 @@ def show(show_id: int):
 
 @app.route('/show/<int:show_id>/follow', methods=['PUT', 'DELETE'])
 def follow_show(show_id: int):
+    if 'username' not in session:
+        return ko_response('Not logged in')
     url_endpoint = 'https://www.tvtime.com/followed_shows'
     response = {}
     show_payload = {'show_id': show_id}
@@ -56,6 +58,8 @@ def follow_show(show_id: int):
 
 @app.route('/episode/<int:episode_id>/watched', methods=['PUT', 'DELETE'])
 def mark_watched(episode_id: int):
+    if 'username' not in session:
+        return ko_response('Not logged in')
     url_endpoint = 'https://www.tvtime.com/watched_episodes'
     response = {}
     episode_payload = {'episode_id': episode_id}

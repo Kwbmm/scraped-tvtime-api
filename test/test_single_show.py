@@ -6,7 +6,7 @@ from src.main import app
 from test.BaseTestClass import BaseTestClass
 
 
-class TestSingleShow(BaseTestClass):
+class SingleShowTestCase(BaseTestClass):
     def setUp(self) -> None:
         app.config['SECRET_KEY'] = 'test_key'
         self.client = app.test_client()
@@ -35,6 +35,16 @@ class TestSingleShow(BaseTestClass):
         watched_episodes = sum(
             [episode['watched'] for season in json_data['seasons'] for episode in season['episodes']])
         self.assertEqual(selected_series['count_watched'], watched_episodes)
+
+    def test_when_not_logged_in_and_following_show_should_ko(self):
+        # Given
+        to_follow_data = {'id': 295829, 'name': 'The Man in the High Castle'}
+
+        # Test
+        response = self.client.put('/show/{}/follow'.format(to_follow_data['id']))
+
+        # Verify
+        self.assertEqual('KO', response.json['status'])
 
     def test_when_following_show_should_ok(self):
         # Given
