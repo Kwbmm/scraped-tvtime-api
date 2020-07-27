@@ -16,7 +16,7 @@ class SingleShowTestCase(BaseTestClass):
         response = self.client.get('/show/42')
 
         # Verify
-        self.assertEqual('KO', response.json['status'])
+        self.assertEqual(401, response.status_code)
 
     def test_when_fetching_single_show_should_return_episodes(self):
         # Given
@@ -44,7 +44,7 @@ class SingleShowTestCase(BaseTestClass):
         response = self.client.put('/show/{}/follow'.format(to_follow_data['id']))
 
         # Verify
-        self.assertEqual('KO', response.json['status'])
+        self.assertEqual(401, response.status_code)
 
     def test_when_following_show_should_ok(self):
         # Given

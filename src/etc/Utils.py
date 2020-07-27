@@ -31,10 +31,6 @@ def update_tvtime_cookies(cookies: Any) -> None:
     session['username']['tvstRemember'] = cookies.get('tvstRemember', old_remember_cookie)
 
 
-def ko_response(reason: str) -> Any:
-    return jsonify({'status': 'KO', 'reason': reason})
-
-
 def ok_response() -> Any:
     return jsonify({'status': 'OK'})
 

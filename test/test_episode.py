@@ -14,7 +14,7 @@ class EpisodeTestCase(BaseTestClass):
         response = self.client.put('/episode/42/watched')
 
         # Verify
-        self.assertEqual('KO', response.json['status'])
+        self.assertEqual(401, response.status_code)
 
     def test_when_episode_watched_should_ok(self):
         # Given

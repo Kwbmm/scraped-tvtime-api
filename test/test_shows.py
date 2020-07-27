@@ -14,7 +14,7 @@ class ShowsTestCase(BaseTestClass):
         response = self.client.get('/shows')
 
         # Verify
-        self.assertEqual('KO', response.json['status'])
+        self.assertEqual(401, response.status_code)
 
     def test_when_fetching_shows_should_return_correct_data(self):
         # Given

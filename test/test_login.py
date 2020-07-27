@@ -26,7 +26,7 @@ class LoginTestCase(BaseTestClass):
         result = self.client.post('/login', data=payload)
 
         # Verify
-        self.assertEqual(result.json['status'], 'KO')
+        self.assertEqual(400, result.status_code)
 
     def test_when_empty_user_or_pass_should_ko(self):
         # Given
@@ -36,7 +36,7 @@ class LoginTestCase(BaseTestClass):
         result = self.client.post('/login', data=payload)
 
         # Verify
-        self.assertEqual(result.json['status'], 'KO')
+        self.assertEqual(400, result.status_code)
 
     def test_when_wrong_user_or_pass_should_ko(self):
         # Given
@@ -46,7 +46,7 @@ class LoginTestCase(BaseTestClass):
         result = self.client.post('/login', data=payload)
 
         # Verify
-        self.assertEqual(result.json['status'], 'KO')
+        self.assertEqual(401, result.status_code)
 
     def test_when_correct_user_and_pass_should_ok(self):
         # Given
