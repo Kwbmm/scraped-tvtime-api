@@ -1,4 +1,4 @@
-name: Scraped TVTime
+name: Run tests
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
     - cron: '0 0 */5 * *'
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -28,3 +28,5 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with coverage
       run: coverage run --source=src/ -m unittest discover -v
+    - name: Make coverage report
+      uses: codecov/codecov-action@v1.3.1
