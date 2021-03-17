@@ -1,4 +1,4 @@
-# TVTime Flask API [![Build Status](https://travis-ci.org/Kwbmm/scraped-tvtime-api.svg?branch=master)](https://travis-ci.org/Kwbmm/scraped-tvtime-api) [![Coverage Status](https://coveralls.io/repos/github/Kwbmm/scraped-tvtime-api/badge.svg)](https://coveralls.io/github/Kwbmm/scraped-tvtime-api) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tvtime-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=tvtime-api)
+# TVTime Flask API [![codecov](https://codecov.io/gh/Kwbmm/scraped-tvtime-api/branch/master/graph/badge.svg?token=CWB4FE67O1)](https://codecov.io/gh/Kwbmm/scraped-tvtime-api) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tvtime-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=tvtime-api)
 
 This is a proof of concept of an API using TVTime service and not exploiting its own API system. This repository aims to provide at least the possibility of retrieving information about your own TV series that you are tracking on [TVTime](https://tvtime.com).
 
