@@ -36,6 +36,15 @@ Not many, except for a TVTime account. But if you are here, you probably already
 
 `requirements.txt` takes care of installing, through `pip` what is needed to run the API.
 
+
+## Development
+
+This codebase is written in Python 3 and requires `pip`.
+
+`pip` and requirements are installed by running `make install`
+
+Tests can be run with `make test`
+
 ## Usage
 
 **Before using this API, please make sure that the backend on which you are running this Flask API can be accessed over secure http requests. Since you are sending login information containing your ID and password, you should NEVER send them on unsecure connections.**
