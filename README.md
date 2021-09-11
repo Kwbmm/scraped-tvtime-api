@@ -43,7 +43,58 @@ This codebase is written in Python 3 and requires `pip`.
 
 `pip` and requirements are installed by running `make install`
 
-Tests can be run with `make test`
+## Testing and debugging
+Tests can be run with `make test`. This will run the tests through `coverage` library to generate a coverage report.
+
+If you wish, for debugging purposes, to run a single test, you can do so by running `python -m unittest discover -k test_name` (e.g. `python -m unittest discover -k test_when_unfollowing_show_should_ok`)
+
+### Remote debugging
+The project can be run inside a docker container, thus remote debugging is a possibility. Remote debugging allows the user to send actual requests through third-party clients (like Postman or from Chrome/Firefox built-in network tab) to this API.
+
+**1) Prereqs:**
+  - A python container on which you've already run the setup (i.e. `make install`)
+  - VSCode with the python plugin installed
+
+**2) Inside the container**
+
+  - Run `FLASK_APP=<path_to_main.py>`
+  - Run `make debug_remote`
+
+A flask webserver should be started and waiting for new requests.
+
+**3) In your VSCode**
+
+You should have setup a `launch.json` inside `.vscode` folder. The file can be easily setup through VSCode remote debugging configuration wizard. Main points to highlights are:
+
+  - The container runs the debug server on port 5678, so the port should be opened on container and the VSCode configuration should point to that port
+  - The flask API runs on port 5000 inside the container. That port must be opened as well.
+  - The VSCode config will contain a `pathMappings` object that needs to be setup properly. Specifically, `remoteRoot` should point to the folder containing this project inside the container, while `localRoot` should point to the folder on your local env (laptop).
+
+Here's an example of my config:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Remote Attach",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "127.0.0.1",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/src/scraped-tvtime-api/"
+                }
+            ]
+        }
+    ]
+}
+```
+If the `launch.json` is correctly setup, you should be able to attach to the remote debugger. If you place breakpoints in the code and try to hit the endpoints, VSCode should stop execution at the breakpoints.
 
 ## Usage
 
