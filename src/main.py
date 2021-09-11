@@ -53,11 +53,13 @@ def follow_show(show_id: int):
 
     if request.method == 'PUT':
         response = Utils.put(url_endpoint, show_payload, cookies=Utils.get_tvtime_cookies()).json()
+        if 'result' not in response or response['result'] != 'OK':
+            return abort(502, '{} request failed!'.format(request.method))
     elif request.method == 'DELETE':
-        response = Utils.delete(url_endpoint, show_payload, cookies=Utils.get_tvtime_cookies()).json()
+        response = Utils.delete(url_endpoint, show_payload, cookies=Utils.get_tvtime_cookies())
+        if not response.ok:
+            return abort(502, '{} request failed!'.format(request.method))
 
-    if 'result' not in response or response['result'] != 'OK':
-        return abort(502, '{} request failed!'.format(request.method))
     return Utils.ok_response()
 
 
@@ -72,10 +74,12 @@ def mark_watched(episode_id: int):
     if request.method == 'PUT':
         response = Utils.put(url_endpoint, episode_payload,
                              cookies=Utils.get_tvtime_cookies()).json()
+        if 'result' not in response or response['result'] != 'OK':
+            return abort(502, '{} request failed!'.format(request.method))
     elif request.method == 'DELETE':
         response = Utils.delete(url_endpoint, episode_payload,
-                                cookies=Utils.get_tvtime_cookies()).json()
+                                cookies=Utils.get_tvtime_cookies())
+        if not response.ok:
+            return abort(502, '{} request failed!'.format(request.method))
 
-    if 'result' not in response or response['result'] != 'OK':
-        return abort(502, '{} request failed!'.format(request.method))
     return Utils.ok_response()
