@@ -12,3 +12,9 @@ debug_remote: install remote_debug_dep
 
 test:
 	coverage run --source=src/ -m unittest discover -v
+
+docker_build:
+	docker build -t scraped-tvtime .
+
+docker_run: docker_build
+	docker run -p 8000:5000 scraped-tvtime
