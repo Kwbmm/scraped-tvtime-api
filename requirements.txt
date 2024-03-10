@@ -2,3 +2,4 @@ Flask == 2.0.0
 beautifulsoup4 == 4.9.1
 requests == 2.23.0
 coverage
+Werkzeug==2.3.7
