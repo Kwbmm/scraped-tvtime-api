@@ -1,3 +1,13 @@
+# This project is archived
+
+Unfortunately TVTime has completely reworked their internal API. So the project is broken.
+
+Also, in hindsight, it doesn't make sense anymore to set the project like this: I believe a future work should provide just an API in the form a library.
+
+It's been a fun project though.
+
+---
+
 # TVTime Flask API [![codecov](https://codecov.io/gh/Kwbmm/scraped-tvtime-api/branch/master/graph/badge.svg?token=CWB4FE67O1)](https://codecov.io/gh/Kwbmm/scraped-tvtime-api) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tvtime-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=tvtime-api)
 
 This is a proof of concept of an API using TVTime service and not exploiting its own API system. This repository aims to provide at least the possibility of retrieving information about your own TV series that you are tracking on [TVTime](https://tvtime.com).
