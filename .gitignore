@@ -3,3 +3,4 @@ env/
 *.pyc
 .coverage
 .vscode/
+.venv
